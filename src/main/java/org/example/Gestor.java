@@ -20,7 +20,7 @@ public class Gestor {
             System.out.println("Error al guardar empleados.");
         }
     }
-    public static ArrayList<Empleados> cargarEmpelados(){
+    public static ArrayList<Empleados> cargarEmpleados(){
         ArrayList<Empleados> lista = new ArrayList<>();
         try {
             File archivo = new File("empleados.txt");
@@ -88,4 +88,107 @@ public class Gestor {
         }
         return lista;
     }
+
+    // Productos
+
+    public static void guardarProductos(ArrayList<Productos> lista){
+        try {
+            PrintWriter writer = new PrintWriter("productos.txt");
+            for (int i = 0; i < lista.size(); i++) {
+                Productos prod = lista.get(i);
+                writer.println(prod.getCodigo() + ";" + prod.getDescripcion() + ";" + prod.getValor());
+            }
+            writer.close();
+        } catch (Exception e) {
+            System.out.println("Error al guardar productos.");
+        }
+    }
+
+    public static ArrayList<Productos> cargarProductos() {
+        ArrayList<Productos> lista = new ArrayList<>();
+        try {
+            File archivo = new File("productos.txt");
+            if (archivo.exists()) {
+                Scanner lector = new Scanner(archivo);
+                while (lector.hasNextLine()) {
+                    String linea = lector.nextLine();
+                    if (!linea.equals("")) {
+                        String[] datos = linea.split(";");
+                        String codigo = datos[0];
+                        String descripcion = datos[1];
+                        double valor = Double.parseDouble(datos[2]);
+
+                        Productos prod = new Productos(codigo, descripcion, valor);
+                        lista.add(prod);
+                    }
+                }
+                lector.close();
+            }
+        } catch (Exception e) {
+            System.out.println("Error al cargar productos.");
+        }
+        return lista;
+    }
+
+    //  VENDEDORES
+    public static void guardarVendedores(ArrayList<Vendedores> lista) {
+        try {
+            PrintWriter writer = new PrintWriter("vendedores.txt");
+            for (int i = 0; i < lista.size(); i++) {
+                Vendedores ven = lista.get(i);
+
+                // Armar el texto de clientes separados por coma
+                String clientesTexto = "";
+                ArrayList<String> listaClientes = ven.getCodigosClientesAsignados();
+                for (int j = 0; j < listaClientes.size(); j++) {
+                    clientesTexto = clientesTexto + listaClientes.get(j);
+                    if (j < listaClientes.size() - 1) {
+                        clientesTexto = clientesTexto + ",";
+                    }
+                }
+                if (clientesTexto.equals("")) {
+                    clientesTexto = "NINGUNO";
+                }
+
+                writer.println(ven.getCc() + ";" + ven.getNombre() + ";" + ven.getCodigoProducto() + ";" + clientesTexto);
+            }
+            writer.close();
+        } catch (Exception e) {
+            System.out.println("Error al guardar vendedores.");
+        }
+    }
+
+    public static ArrayList<Vendedores> cargarVendedores() {
+        ArrayList<Vendedores> lista = new ArrayList<>();
+        try {
+            File archivo = new File("vendedores.txt");
+            if (archivo.exists()) {
+                Scanner lector = new Scanner(archivo);
+                while (lector.hasNextLine()) {
+                    String linea = lector.nextLine();
+                    if (!linea.equals("")) {
+                        String[] datos = linea.split(";");
+                        String cc = datos[0];
+                        String nombre = datos[1];
+                        String codProd = datos[2];
+
+                        Vendedores ven = new Vendedores(cc, nombre, codProd);
+
+                        if (datos.length > 3 && !datos[3].equals("NINGUNO")) {
+                            String[] clientesArray = datos[3].split(",");
+                            for (int k = 0; k < clientesArray.length; k++) {
+                                ven.agregarClientes(clientesArray[k]);
+                            }
+                        }
+                        lista.add(ven);
+                    }
+                }
+                lector.close();
+            }
+        } catch (Exception e) {
+            System.out.println("Error al cargar vendedores.");
+        }
+        return lista;
+    }
 }
+

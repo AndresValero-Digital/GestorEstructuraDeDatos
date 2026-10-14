@@ -23,7 +23,8 @@ public class Clientes {
     public void setTelefono(String telefono){this.telefono = telefono;}
 
     public String toFileString(){
-        return codigoCc+";"+nombre+":"+direccion+";"+telefono;
+        return codigoCc+";"+nombre+";"+direccion+";"+telefono;
+
     }
 
     @Override

@@ -22,9 +22,11 @@ public class Empleados {
     public double getSalario() {return salario;}
     public void setSalario (double salario) {this.salario =salario;}
 
+
     public String toFileString() {
-        return cc + ";" + ";" + departamento + ";" +salario;
+        return cc + ";" + nombre + ";" + departamento + ";" + salario;
     }
+
 
     @Override
     public String toString(){
